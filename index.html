@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Peer-to-Peer</title>
+
+    <link rel="icon" type="image/png" href="/favicon.svg">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="module" src="/javascript/main.js"></script>
+    <script type="module" src="/javascript/chat.js"></script>
+    <script type="module" src="/javascript/file.js"></script>
+    <script type="module" src="/javascript/streaming.js"></script>
+</head>
+
+<body>
+
+    <!-- Sezione per inserire il nome -->
+    <div id="nameRequest" class="name-request">
+        <div class="request-container">
+            <h2>Inserisci il tuo nome</h2>
+            <input type="text" id="usernameInput" placeholder="Nome utente" />
+            <button id="submitNameButton">Invia</button>
+        </div>
+    </div>
+    
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon" id="themeIcon"></i>
+        Cambia Tema
+    </div>
+
+    <div class="container">
+
+        <div class="participants-section">
+            <div class="participants-header">Partecipanti</div>
+            <div class="participants-list">
+                <!-- Lista dei partecipanti -->
+                <div class="participant">
+                    <p><strong>Tu:</strong> <span id="localUsername">In attesa...</span></p>
+                    <p><strong>Peer:</strong> <span id="remoteUsername">In attesa...</span></p>
+                </div>
+            </div>
+
+            <div class="connection-option">
+                
+                <h2>Crea Connessione </h2>
+                <button id="ConnectionButton">Crea Connessione (offer)</button>
+
+                <br><h2>Unisciti ad una Connessione</h2>
+                <p>Copia il codice della offer precedentemente ricevuto</p>
+                
+                <input id="callInput" />
+                <button id="answerButton">Answer</button>
+
+                <br><h2>Chiudi Connessione</h2>
+                <button id="hangupButton" disabled>Scollegati</button>
+
+            </div>
+        </div>
+
+
+        <div class="chat-section">
+            <div class="chat-header">Chat</div>
+            <div class="chat-messages" id="chatMessages">
+                <!-- Messaggi della chat -->
+                <div class="message" style="text-align: center;">Benvenut* nel nostro sistema Peer to Peer per condividere informazioni e file. Se vuoi puoi anche avviare una videochiamata.</div>
+                <br><br>
+            </div>
+            <div class="chat-controls">
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="Scrivi un messaggio...">
+                    <label for="fileInput" class="file-upload-label">
+                        <i class="fas fa-paperclip"></i>
+                    </label>
+                    <input type="file" id="fileInput" style="display: none;">
+                    <button id="sendMessageButton"><i class="fas fa-paper-plane"></i></button>
+                </div>
+                <button id="callButton">Avvia Videochiamata</button>
+            </div>
+        </div>
+
+        <div class="video-call-section" id="videoCallSection">
+            <div class="video-call-header">Videochiamata</div>
+            <div class="video-call-content">
+                <!-- Contenuto della videochiamata -->
+                <div class="video-container">
+                    <h3>Stream Remoto</h3>
+                    <video id="remoteVideo" class="video-player" autoplay playsinline></video>
+                </div>
+                <div class="video-container local">
+                    <h3>Stream Locale</h3>
+                    <video id="webcamVideo" class="video-player" autoplay playsinline></video>
+                    <div class="video-controls">
+                        <button id="mic-btn"><i class="fas fa-microphone"></i></button>
+                        <button id="camera-btn"><i class="fas fa-video"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>Credits:</p>
+        <p>Carlucci Manuel & Nitti Vittorio</p>
+    </footer>
+    
+
+
+    <script>
+        // Funzione per cambiare tema
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
+            body.classList.toggle('light-theme');
+            if (body.classList.contains('light-theme')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        }
+    </script>
+</body>
+</html>
