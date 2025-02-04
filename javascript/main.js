@@ -286,7 +286,6 @@ peerConnection.ondatachannel = (event) => {
   setupDataChannel(remoteDataChannel); // Configura il DataChannel per il peer remoto
 
   if (!alreadyPrinted) {
-    const chatInput = document.getElementById('chatInput');
     const chatMessages = document.getElementById('chatMessages');
     
     const newMessage = document.createElement('div');
@@ -378,27 +377,41 @@ function handleChatKeyPress(event) {
 
 /* ---------------------------------- Gestione file ---------------------------------- */
 
-const BYTES_PER_CHUNK = 1200;
+const BYTES_PER_CHUNK = 1200;   // Ogni volta che il file viene letto, viene suddiviso in blocchi di 1200 byte.
 var file;
 var currentChunk;
 var fileInput = $( 'input[type=file]' );
+
+// Crea un'istanza di FileReader, un oggetto JavaScript che permette di leggere i contenuti di file locali.
 var fileReader = new FileReader();
 
+
+/* Spiegazione:
+Calcola il punto di inizio e fine del blocco da leggere:
+  start è l'inizio del blocco, basato sul numero di blocchi già inviati (currentChunk).
+  end è la fine del blocco, calcolato come la minima dimensione tra il file intero e la somma dello start più la grandezza massima di un chunk.
+Legge il blocco come ArrayBuffer (un formato binario adatto alla trasmissione via WebRTC).
+*/
 function readNextChunk() {
     var start = BYTES_PER_CHUNK * currentChunk;
     var end = Math.min( file.size, start + BYTES_PER_CHUNK );
     fileReader.readAsArrayBuffer( file.slice( start, end ) );
 }
 
+
+// Quando il fileReader ha finito di leggere un blocco, questo viene inviato tramite il dataChannel.
 fileReader.onload = function() {
   dataChannel.send( fileReader.result );
     currentChunk++;
     
+    // Se non si è ancora inviato tutto il file, chiama di nuovo readNextChunk() per leggere e inviare il prossimo blocco.
     if( BYTES_PER_CHUNK * currentChunk < file.size ) {
         readNextChunk();
     }
 };
 
+
+// Quando l'Utente Seleziona un File
 fileInput.on( 'change', function() {
     file = fileInput[ 0 ].files[ 0 ];
     currentChunk = 0;
