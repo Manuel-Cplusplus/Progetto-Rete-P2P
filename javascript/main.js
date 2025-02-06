@@ -106,7 +106,7 @@ establishConnection.onclick = async () => {
 
   // Crea il DataChannel
   dataChannel = peerConnection.createDataChannel('chatChannel');
-  setupDataChannel(dataChannel); // Configura il DataChannel
+  setupDataChannel(dataChannel);
   
   // Referenziamo firestore per il signaling server
   // Creiamo un nuovo documento in Firestore nella collezione calls.
@@ -300,7 +300,7 @@ peerConnection.ondatachannel = (event) => {
   }
 };
 
-// Funzione per configurare il DataChannel
+
 function setupDataChannel(channel) {
  channel.onopen = () => {
    console.log('DataChannel aperto!');
@@ -434,7 +434,7 @@ peerConnection.addEventListener('datachannel', event => {
   
   dataChannel.onmessage = event => {
       const data = event.data;
-      const errorMessgae = "⛓️‍💥 La connessione fra i due Peer si è interrotta con successo!⛓️‍💥";
+      const endConnectionMessage = "⛓️‍💥 La connessione fra i due Peer si è interrotta con successo!⛓️‍💥";
       const jsonFormatRegex = /^{.*"fileName":".+","fileSize":\d+.*}$/;
       /* Spiegazione Regex:
           ^ e $: Assicurano che la regex corrisponda all'intera stringa.
@@ -444,7 +444,7 @@ peerConnection.addEventListener('datachannel', event => {
         .*}$: Può contenere qualsiasi carattere (.*) prima di chiudere con }.
       */
         if (!jsonFormatRegex.test(data)) {
-          if (typeof event.data === 'string' && data != errorMessgae) {
+          if (typeof event.data === 'string' && data != endConnectionMessage) {
         // È un messaggio di chat
         const chatMessages = document.getElementById('chatMessages');
         const newMessage = document.createElement('div');
@@ -455,7 +455,7 @@ peerConnection.addEventListener('datachannel', event => {
     }
   }
 
-    if (data === errorMessgae){
+    if (data === endConnectionMessage){
         const chatMessages = document.getElementById('chatMessages');
         const newMessage = document.createElement('div');
         newMessage.classList.add('message');
